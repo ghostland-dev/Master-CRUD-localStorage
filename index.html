@@ -1,195 +1,210 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
-  <head>
+<head>
+    <meta charset="UTF-8">
     <title>Parcel Sandbox</title>
-    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- UIkit CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.14.1/dist/css/uikit.min.css" />
+
+    <!-- Custom CSS for styling -->
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .task-form {
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .task-form input,
+        .task-form button {
+            margin-bottom: 10px;
+        }
+
+        .task-table {
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-table th,
+        .task-table td {
+            text-align: center;
+        }
+    </style>
 
     <!-- UIkit JS -->
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.14.1/dist/js/uikit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.14.1/dist/js/uikit-icons.min.js"></script>
-  </head>
+</head>
 
-  <body class="uk-container-expand uk-padding-large uk-text-center uk-flex-center">
- 
-     
-    <form classe=" uk-flex uk-padding-large uk-card uk-padding uk-flex ">
-      <fieldset class="uk-fieldset">
-       <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s  " uk-grid>
-    <div class="uk-card-media-left uk-cover-container">
+<body>
 
-       <div class="uk-overflow-hidden">
-            <img src="https://images.pexels.com/photos/1925536/pexels-photo-1925536.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" width="1800" height="1200" alt="Example image" class="uk-animation-reverse uk-transform-origin-top-right" uk-scrollspy="cls: uk-animation-kenburns; repeat: true">
+    <div class="container uk-container-expand uk-padding-large uk-text-center uk-flex-center">
+
+        <form class="task-form uk-flex uk-padding-large uk-card uk-padding uk-flex ">
+            <fieldset class="uk-fieldset">
+                <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s" uk-grid>
+                    <div class="uk-card-media-left uk-cover-container">
+                        <div class="uk-overflow-hidden">
+                            <img src="https://images.pexels.com/photos/1925536/pexels-photo-1925536.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" width="1800" height="1200" alt="Example image" class="uk-animation-reverse uk-transform-origin-top-right" uk-scrollspy="cls: uk-animation-kenburns; repeat: true">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="uk-card-body">
+                            <h3 class="uk-card-title">Task List</h3>
+                            <p>Use JavaScript to simulate a database or API to store your tasks.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-margin uk-flex-center">
+                    <input class="uk-input uk-text-center" type="text" placeholder="Title" id="title" />
+                </div>
+
+                <button type="button" class="uk-margin-left uk-button uk-button-primary" id="add">
+                    Save
+                </button>
+                <button type="button" class="uk-margin-left uk-button uk-button-danger" id="clear">
+                    Clear All
+                </button>
+                <button type="button" class="uk-margin-left uk-button uk-button-default" onclick="window.print();" id="print">
+                    Print
+                </button>
+            </fieldset>
+        </form>
+
+        <div class="task-table">
+            <table class="uk-table uk-table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody id="tableContent"></tbody>
+            </table>
         </div>
-        
+
     </div>
-    <div>
-        <div class="uk-card-body">
-            <h3 class="uk-card-title">liste des tâches</h3>
-            <p>Javascript nous permet de simuler la base de données ou un API pour pouvoir enregistrer les données.</p>
-        </div>
-    </div>
-</div>
 
-        <div class="uk-margin uk-flex-center">
-          <input class="uk-input uk-text-center" type="text" placeholder="Titre" id="titre" />
-        </div>
-
-        <!--  <div class="uk-margin">
-          <textarea
-            class="uk-textarea"
-            rows="5"
-            placeholder="Détails de la taches"
-            id="détails"
-          ></textarea>
-        </div> -->
-
-        <button type="submit" class="uk-margin-left uk-button uk-button-primary" id="ajouter">
-          Enregsitrer
-        </button>
-        <button type="submit" class="uk-margin-left uk-button uk-button-danger" id="supprimer">
-          Tout Supprimer
-        </button>
-        <button type="submit" class="uk-margin-left uk-button uk-button-default" onclick="window.print();" id="imprimer">
-          Imprimer
-        </button>
-      </fieldset>
-    </form>
-
-    <table class="uk-table uk-table-striped">
-      <thead>
-        <tr>
-          <th>#N°</th>
-          <th>Titre</th>
-          <th>Date</th>
-          <th>Option</th>
-        </tr>
-      </thead>
-      <tbody id="tableContent"></tbody>
-    </table>
-
- 
     <script>
+        // Hash function to encrypt the content
+        function hash(content) {
+            let storage = [];
+            let result = content.split("");
+            for (let letter of result) {
+                storage.push(letter.charCodeAt());
+            }
+            return storage;
+        }
 
-       
- 
-      // Function de cryptage
+        // Unhash function to compare encrypted content
+        function unhash(stored, submitted) {
+            const equals = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+            return equals(stored, submitted);
+        }
 
-    function hash(content){
-      let storage = [];
-      let result = content.split("");
-     
-      for (letter in result) {
-        let item = result[letter]; 
-        storage.push(item.charCodeAt());
-      }
-     return storage; 
-    }
+        // Event listener for "Clear All" button
+        document.querySelector('#clear').addEventListener('click', function () {
+            localStorage.clear();
+            window.location.reload();
+        });
 
-     // Function de décryptage
-      
-    function unhash(stored, submited){
-      const equals = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+        // Event listener for "Save" button
+        document.querySelector("#add").addEventListener('click', function () {
+            let title = document.querySelector('#title').value;
+            if (title) {
+                localStorage.setItem(localStorage.length + 1, title);
+                window.location.reload();
+            } else {
+                alert("Please enter a task title.");
+            }
+        });
 
-      const a = stored;
-      const b = submited;
+        // Load tasks from localStorage and display them in the table
+        window.onload = function () {
+            let tableContent = document.querySelector('#tableContent');
+            for (let i = 0; i < localStorage.length; i++) {
+                let row = document.createElement('tr');
+                let date = new Date();
 
-     return equals(a, b); // true
-      
-      
-    }
+                row.innerHTML = `
+                    <td>${i + 1}</td>
+                    <td>${localStorage.getItem(i + 1)}</td>
+                    <td>${date.toLocaleDateString("en-US")}</td>
+                    <td>
+                        <button class="uk-button uk-button-danger" uk-toggle="target: #modal-delete-${i + 1}">Delete</button>
+                        <button class="uk-button uk-button-secondary" uk-toggle="target: #modal-edit-${i + 1}">Edit</button>
+                        <button class="uk-button uk-button-primary" uk-toggle="target: #modal-view-${i + 1}">View</button>
 
+                        <!-- Delete Modal -->
+                        <div id="modal-delete-${i + 1}" uk-modal>
+                            <div class="uk-modal-dialog uk-modal-body">
+                                <h2 class="uk-modal-title">Confirmation</h2>
+                                <p>Are you sure you want to delete this task?</p>
+                                <p class="uk-text-right">
+                                    <button class="uk-button uk-button-danger" onClick="deleteTask(${i + 1})">Delete</button>
+                                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                                </p>
+                            </div>
+                        </div>
 
-    let hashedPass = hash('salut');
-    let unhashedPass = unhash(hashedPass,hashedPass);
-     
-    console.log(hashedPass   ); 
-    console.log(unhashedPass ); 
-     
-  
+                        <!-- Edit Modal -->
+                        <div id="modal-edit-${i + 1}" uk-modal>
+                            <div class="uk-modal-dialog uk-modal-body">
+                                <input class="uk-input" type="text" placeholder="New value" id="edit-${i + 1}" value="${localStorage.getItem(i + 1)}" />
+                                <button class="uk-button uk-button-primary" onClick="editTask(${i + 1})">Save</button>
+                                <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                            </div>
+                        </div>
 
-      // Insertion des données
+                        <!-- View Modal -->
+                        <div id="modal-view-${i + 1}" uk-modal>
+                            <div class="uk-modal-dialog uk-modal-body">
+                                <p>${localStorage.getItem(i + 1)}</p>
+                                <button class="uk-button uk-button-default uk-modal-close" type="button">Close</button>
+                            </div>
+                        </div>
+                    </td>
+                `;
+                tableContent.appendChild(row);
+            }
+        }
 
-      let DeleteBtn = document.querySelector('#supprimer');
-      DeleteBtn.addEventListener('click', function() {
-        localStorage.clear();
-      })
+        // Function to delete a task
+        function deleteTask(id) {
+            localStorage.removeItem(id);
+            window.location.reload();
+        }
 
-      let SubmitBtn = document.querySelector("#ajouter");
-      SubmitBtn.addEventListener('click', function() {
-
-        let insert = document.querySelector('#titre').value;
-        localStorage.setItem(localStorage.length+1, insert);
-      }, false);
-
-      // Recuperation des données
-
-      for (let a = 0; a < localStorage.length; a++) {
-
-        let cont = document.querySelector('#tableContent');
-        let child = document.createElement('tr');
-        let date = new Date("2015-3-25");
-        let subId = document.createElement('td');
-        subId.textContent = a+1;
-        let subTitle = document.createElement('td');
-        subTitle.textContent = localStorage[a+1];
-        let subDescription = document.createElement('td');
-        subDescription.textContent = date.toLocaleDateString("en-US");
-        let subOption = document.createElement('td');
-        subOption.innerHTML = `
-        <form >
-           
-          <!-- This is a button toggling the modal -->
-          <button class="uk-button uk-button-danger uk-margin-small-right" type="button" uk-toggle="target: #modal-example_${a+1}">Effacer</button>
-          <!-- This is the modal -->
-          <div id="modal-example_${a+1}" uk-modal>
-              <div class="uk-modal-dialog uk-modal-body">
-                  <h2 class="uk-modal-title">Confirmation</h2>
-                  <p>Est ce que vous sûre de vouloir supprimer cette element !</p>
-                  <p class="uk-text-right">
-                      <button type="submit" class="uk-margin-left uk-button uk-button-danger" onClick="localStorage.removeItem(${a+1});window.location.reload();" >Supprimer </button>
-                      <button class="uk-button uk-button-default uk-modal-close" type="button">Annuler</button>
-                  </p>
-              </div>
-          </div>
-          <a class="uk-button uk-button-secondary" onClick="document.querySelector('#changer').value = localStorage.getItem(${a+1});  " href="#modal-center-${a+1}" uk-toggle>Modifier</a>
-          <div id="modal-center-${a+1}" class="uk-flex-top" uk-modal>
-          <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
-          <div class="uk-margin uk-flex-center">
-            <input class="uk-input uk-text-center" type="text" placeholder="nouvelle valeur" id="changer" />
-          </div>
-          <button type="submit" class="uk-margin-left uk-button uk-button-primary" onClick="localStorage.setItem(${a+1},document.querySelector('#changer').value); window.location.reload();" >Enregistrer les modifications </button>
-          <button class="uk-button uk-button-default uk-modal-close" type="button">Annuler</button>
-          </div>
-          </div>
-          <a class="uk-button uk-button-primary" onClick="document.querySelector('#lire').textContent = localStorage.getItem(${a+1});  " href="#modal-center--${a+1}" uk-toggle>voir</a>
-          <div id="modal-center--${a+1}" class="uk-flex-top" uk-modal>
-          <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
-          <div class="uk-margin uk-flex-center">
-           
-            <p id="lire"> </p>
-          </div>
-          <button class="uk-button uk-button-default uk-modal-close" type="button">Fermer</button>
-          </div>
-          </div>
-        </form>`;
-
-        // créer les cases 
-
-        child.appendChild(subId);
-        child.appendChild(subTitle);
-        child.appendChild(subDescription);
-        child.appendChild(subOption);
-        cont.appendChild(child);
-
-   }
-      
- 
+        // Function to edit a task
+        function editTask(id) {
+            let newValue = document.querySelector(`#edit-${id}`).value;
+            if (newValue) {
+                localStorage.setItem(id, newValue);
+                window.location.reload();
+            } else {
+                alert("Please enter a new value.");
+            }
+        }
     </script>
 
-
-  </body>
+</body>
 
 </html>
