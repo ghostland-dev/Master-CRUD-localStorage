@@ -1,4 +1,5 @@
 # LocalStorage Task Manager
+![SCREEN](https://github.com/Ismail-Mouyahada/Master-CRUD-localStorage/assets/66369128/0180d1ef-c5c7-45bb-a3d8-f02446c32f19)
 
 This project is a simple task manager that utilizes the browser's localStorage to store and manage tasks. The application allows users to add, view, modify, and delete tasks, with a user-friendly interface built using UIkit.
 
