@@ -108,3 +108,8 @@ Contributions are welcome! Please feel free to submit a pull request or open an 
 - [UIkit](https://getuikit.com/) for the UI components.
 - [Pexels](https://www.pexels.com/) for the example image.
 
+## Deploy
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fghostland-dev%2Fcrud-localstorage)
+
+Click the button to deploy your own copy on Vercel in one step.
